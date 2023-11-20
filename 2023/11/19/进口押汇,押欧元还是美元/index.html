@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ptpimg.me/lspa93.jpg">
 <meta property="article:published_time" content="2023-11-19T03:42:14.000Z">
-<meta property="article:modified_time" content="2023-11-20T04:30:47.999Z">
+<meta property="article:modified_time" content="2023-11-20T05:26:31.422Z">
 <meta property="article:author" content="chaosblue">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -332,19 +332,8 @@
 <p>&emsp;&emsp;当外币信用证到单后,如果企业有银行授信会选择办理押汇,是直接办理信用证相同币种的押汇还是办理错币种押汇,下面的公式推导提供了币种选择的理论支持:<br>一、付款币种为欧元</p>
 <p>押欧元金额E0，美元押汇利率r1，欧元押汇利率r2<br>押汇当日EUR&#x2F;USD&#x3D;A0  (欧元兑美元)<br>还款日EUR&#x2F;USD&#x3D;at  USD&#x2F;CNY&#x3D; bt   EUR&#x2F;CNY&#x3D; ct  即at&#x3D; ct&#x2F; bt<br>①押欧元付款，到期日偿还本息人民币合计E0（r2+1）ct<br>②押美元付欧，到期日偿还本息人民币合计E0 A0（r1+1）bt<br>所以，①&lt;②，则押欧元;<br>①&gt;②，则押美元。</p>
 <p>押美元的情况：</p>
-<table><tr><td bgcolor="LightSteelBlue">
-&emsp;E0（r2+1）ct> E0 A0（r1+1）bt
-
-<p>&emsp;ct&#x2F; bt&gt; [E0 A0（r1+1）] &#x2F; [E0（r2+1）]</p>
-<p>&emsp;ct&#x2F; bt &gt; A0（r1+1）&#x2F;（r2+1）</p>
-</td></tr></table>
-其中at= ct/ bt，即
-at > A0（r1+1）/（r2+1）
-因变量均为正数，
-所以，当at > A0（r1+1）/（r2+1）时，
-E0（r2+1）ct> E0 A0（r1+1）bt ，即押美元到期支付的人民币少。
- 
-
+<figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs subunit">&amp;emsp;E0（r2<span class="hljs-string">+1</span>）ct&gt; E0 A0（r1<span class="hljs-string">+1</span>）bt<br><br>&amp;emsp;ct/ bt&gt; [E0 A0（r1<span class="hljs-string">+1</span>）] / [E0（r2<span class="hljs-string">+1</span>）]<br><br>&amp;emsp;ct/ bt &gt; A0（r1<span class="hljs-string">+1</span>）/（r2<span class="hljs-string">+1</span>）<br></code></pre></td></tr></table></figure>
+<p>其中at&#x3D; ct&#x2F; bt，即<br>at &gt; A0（r1+1）&#x2F;（r2+1）<br>因变量均为正数，<br>所以，当at &gt; A0（r1+1）&#x2F;（r2+1）时，<br>E0（r2+1）ct&gt; E0 A0（r1+1）bt ，即押美元到期支付的人民币少。</p>
 <p>二、付款币种为美元</p>
 <p>押美元金额E0，美元押汇利率r1，欧元押汇利率r2<br>押汇当日EUR&#x2F;USD&#x3D;A0  (欧元兑美元)<br>还款日EUR&#x2F;USD&#x3D;at  USD&#x2F;CNY&#x3D; bt   EUR&#x2F;CNY&#x3D; ct  即at&#x3D; ct&#x2F; bt<br>①押美元付款，到期日偿还本息人民币合计E0（r1+1）bt<br>②押欧付美，到期日偿还本息人民币合计（E0&#x2F; A0）（r2+1） ct所以，①&lt;②，则押美元;<br>①&gt;②，则押欧元。<br>押美元的情况：</p>
 <table><tr><td bgcolor="LightSteelBlue">
