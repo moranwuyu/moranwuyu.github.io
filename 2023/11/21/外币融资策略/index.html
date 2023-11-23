@@ -668,19 +668,27 @@
                       如果文章对您有所帮助,请不吝支持!
                   </span>
                   <br>
-                  <input type="button" id="btn_donate" style="background-color: #663399; border: none; color: white; padding: 10px 32px; text-align: center; text-decoration: none; display: inline-block; border-radius: 8px;margin-bottom: 10px;" value="打赏支持"/>
+                  <input type="button" id="btn_donate" style="background-color: #663399; border: none; color: white; padding: 10px 32px; text-align: center; text-decoration: none; display: inline-block; border-radius: 8px;margin-bottom: 10px;" value="❤ 打赏"/>
                   <br>
               </div>  
-              <div id="donate_guide" class="donate_bar center" style="display: none; text-align: center;">
+              <div id="donate_guide" class="donate_bar center" style="display: none; text-align: center; display: flex; justify-content: center;">
                   <!-- 支付宝打赏图案 -->
-                  <img src="/img/alipay.jpg" srcset="/img/loading.gif" lazyload alt="支付宝打赏" style="max-width: 200px; max-height: 200px; display: inline-block; margin-right: 10px;"> 
+                  <div style="text-align: center; margin-right: 10px;">
+                      <img src="/img/alipay.jpg" srcset="/img/loading.gif" lazyload alt="支付宝打赏" style="max-width: 200px; max-height: 200px; display: inline-block;"> 
+                      <br>
+                      <span>支付宝</span>
+                  </div>
                   <!-- 微信打赏图案 -->
-                  <img src="/img/wechatpay.jpg" srcset="/img/loading.gif" lazyload alt="微信打赏" style="max-width: 200px; max-height: 200px; display: inline-block;">
+                  <div style="text-align: center;">
+                      <img src="/img/wechatpay.jpg" srcset="/img/loading.gif" lazyload alt="微信打赏" style="max-width: 200px; max-height: 200px; display: inline-block;"> 
+                      <br>
+                      <span>微信</span>
+                  </div>
               </div>
               <script type="text/javascript">
                   document.getElementById('btn_donate').onclick = function(){
                       var qr = document.getElementById("donate_guide");
-                      qr.style.display = (qr.style.display === "none") ? "block" : "none";
+                      qr.style.display = (qr.style.display === "none") ? "flex" : "none";
                   }
               </script>
             </div>
