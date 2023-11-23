@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/img/hexo.jpg">
 <meta property="article:published_time" content="2023-11-22T07:29:03.000Z">
-<meta property="article:modified_time" content="2023-11-22T07:54:05.948Z">
+<meta property="article:modified_time" content="2023-11-23T03:59:59.522Z">
 <meta property="article:author" content="chaosblue">
 <meta property="article:tag" content="原创">
 <meta property="article:tag" content="Hexo">
@@ -269,7 +269,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          266 字
+          262 字
         
       </span>
     
@@ -334,13 +334,34 @@
 <p>更新后github推送mainf分支,而gitee仍然是master,本地可通过修改_config.yml中的deploy块来实现同时推送Github和Gitee,代码如下:</p>
 <figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">deploy:</span><br>  - type: git<br><span class="hljs-symbol">    repo:</span> https:<span class="hljs-comment">//github.com/xxx/xxx.github.io.git</span><br><span class="hljs-symbol">    branch:</span> main<br><span class="hljs-symbol">    token:</span> xxxxxxxxxxxxxxxx<br><br>  - type: git<br><span class="hljs-symbol">    repo:</span> https:<span class="hljs-comment">//gitee.com/xxx/xxx.git</span><br><span class="hljs-symbol">    branch:</span> master<br></code></pre></td></tr></table></figure>
 
-<p>ster</p>
-<pre><code class="hljs">
-</code></pre>
-
                 
               </div>
             
+            <hr/>
+            <!-- 添加捐赠图标 -->
+            <div class="post-donate">
+              <div id="donate_board" class="donate_bar center" style="text-align: center;">
+                  <span class="donate_txt">
+                      如果文章对您有所帮助,请不吝支持!
+                  </span>
+                  <br>
+                  <input type="button" id="btn_donate" style="background-color: #663399; border: none; color: white; padding: 10px 32px; text-align: center; text-decoration: none; display: inline-block; border-radius: 8px;margin-bottom: 10px;" value="打赏支持"/>
+                  <br>
+              </div>  
+              <div id="donate_guide" class="donate_bar center" style="display: none; text-align: center;">
+                  <!-- 支付宝打赏图案 -->
+                  <img src="/img/alipay.jpg" srcset="/img/loading.gif" lazyload alt="支付宝打赏" style="max-width: 200px; max-height: 200px; display: inline-block; margin-right: 10px;"> 
+                  <!-- 微信打赏图案 -->
+                  <img src="/img/wechatpay.jpg" srcset="/img/loading.gif" lazyload alt="微信打赏" style="max-width: 200px; max-height: 200px; display: inline-block;">
+              </div>
+              <script type="text/javascript">
+                  document.getElementById('btn_donate').onclick = function(){
+                      var qr = document.getElementById("donate_guide");
+                      qr.style.display = (qr.style.display === "none") ? "block" : "none";
+                  }
+              </script>
+            </div>
+            <!-- 添加捐赠图标 -->
             <hr/>
             <div>
               <div class="post-metas my-3">
@@ -531,6 +552,9 @@
 
 
   
+
+
+
 
 
 
