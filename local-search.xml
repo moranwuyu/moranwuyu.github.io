@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>系统升级日志-(1)数据录入规范判断触发键</title>
+    <link href="/2023/11/30/%E7%B3%BB%E7%BB%9F%E5%8D%87%E7%BA%A7%E6%97%A5%E5%BF%97-(1)%E6%95%B0%E6%8D%AE%E5%BD%95%E5%85%A5%E8%A7%84%E8%8C%83%E5%88%A4%E6%96%AD%E8%A7%A6%E5%8F%91%E9%94%AE/"/>
+    <url>/2023/11/30/%E7%B3%BB%E7%BB%9F%E5%8D%87%E7%BA%A7%E6%97%A5%E5%BF%97-(1)%E6%95%B0%E6%8D%AE%E5%BD%95%E5%85%A5%E8%A7%84%E8%8C%83%E5%88%A4%E6%96%AD%E8%A7%A6%E5%8F%91%E9%94%AE/</url>
+    
+    <content type="html"><![CDATA[<p>历史更新:</p><p><a href="https://moranwuyu.gitee.io/2023/11/30/%E7%B3%BB%E7%BB%9F%E5%8D%87%E7%BA%A7%E6%97%A5%E5%BF%97-(1)%E6%95%B0%E6%8D%AE%E5%BD%95%E5%85%A5%E8%A7%84%E8%8C%83%E5%88%A4%E6%96%AD%E8%A7%A6%E5%8F%91%E9%94%AE/">(1) 增加数据录入是否规范的触发键</a></p><h5 id="触发键-对数据录入是否规范进行判断并弹出提示"><a href="#触发键-对数据录入是否规范进行判断并弹出提示" class="headerlink" title="触发键:对数据录入是否规范进行判断并弹出提示:"></a>触发键:对数据录入是否规范进行判断并弹出提示:</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs mysql">BEGIN<br>-- 更新&quot;责任人&quot;和&quot;首次录入时间&quot;字段<br>    SET NEW.责任人= SUBSTRING_INDEX(USER(), &#x27;@&#x27;, 1);<br>    SET NEW.首次录入时间= NOW();<br><br>-- 错误判断<br>IF NEW.还款金额 &lt;&gt; &#x27;0.00&#x27; AND NEW.还款金额 &lt;&gt; NEW.放款金额 THEN<br>SIGNAL SQLSTATE &#x27;45000&#x27;<br>SET MESSAGE_TEXT = &#x27;录入错误：&quot;还款金额&quot;只能等于&quot;放款金额&quot;或等于&quot;0.00&quot;&#x27;;<br>END IF;<br><br>IF NEW.还款金额 = &#x27;0.00&#x27; AND NEW.还款日期 is not NULL THEN<br>SIGNAL SQLSTATE &#x27;45000&#x27;<br>SET MESSAGE_TEXT = &#x27;录入错误：没有还款!请将&quot;还款日期&quot;的值设为&quot;NULL&quot;&#x27;;<br>END IF;<br><br>IF NEW.还款金额 = NEW.放款金额 AND NEW.还款日期 is NULL THEN<br>SIGNAL SQLSTATE &#x27;45000&#x27;<br>SET MESSAGE_TEXT = &#x27;录入错误：已结清! 请维护&quot;还款日期&quot;&#x27;;<br>END IF;<br><br>IF NEW.质押释放金额 &lt;&gt; &#x27;0.00&#x27; AND NEW.质押释放金额 &lt;&gt; NEW.质押金额 THEN<br>SIGNAL SQLSTATE &#x27;45000&#x27;<br>SET MESSAGE_TEXT = &#x27;录入错误：&quot;质押释放金额&quot;只能等于&quot;质押金额&quot;或等于&quot;0.00&quot;&#x27;;<br>END IF;<br><br>IF NEW.质押释放金额  = &#x27;0.00&#x27; AND NEW.质押释放日期  is not NULL THEN<br>SIGNAL SQLSTATE &#x27;45000&#x27;<br>SET MESSAGE_TEXT = &#x27;录入错误：无保证金释放,请将&quot;质押释放日期&quot;的值设为&quot;NULL&quot;&#x27;;<br>END IF;<br><br>IF NEW.质押释放金额 = NEW.质押金额 AND NEW.质押释放日期 is NULL AND NEW.质押金额&lt;&gt; &#x27;0.00&#x27; THEN<br>SIGNAL SQLSTATE &#x27;45000&#x27;<br>SET MESSAGE_TEXT = &#x27;录入错误：已结清! 请维护&quot;押释放日期&quot;&#x27;;<br>END IF;<br><br>-- 如果还款金额等于放款金额则更新&quot;是否结清&quot;字段<br>  IF NEW.放款金额 = NEW.还款金额 THEN<br>SET NEW.是否结清 = &#x27;是&#x27;;<br>ELSE<br>SET NEW.是否结清 = &#x27;否&#x27;;<br>END IF;<br>END<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>IT</category>
+      
+      <category>MySQL</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>原创</tag>
+      
+      <tag>mysql</tag>
+      
+      <tag>fin_details系统更新日志</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Word引用Excel单元格数据的VBA方法</title>
     <link href="/2023/11/30/Word%E5%BC%95%E7%94%A8Excel%E5%8D%95%E5%85%83%E6%A0%BC%E6%95%B0%E6%8D%AE%E7%9A%84VBA%E6%96%B9%E6%B3%95/"/>
     <url>/2023/11/30/Word%E5%BC%95%E7%94%A8Excel%E5%8D%95%E5%85%83%E6%A0%BC%E6%95%B0%E6%8D%AE%E7%9A%84VBA%E6%96%B9%E6%B3%95/</url>
@@ -29,37 +60,6 @@
       <tag>宏</tag>
       
       <tag>VBA</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>系统升级日志-(1)数据录入规范判断触发键</title>
-    <link href="/2023/11/30/%E7%B3%BB%E7%BB%9F%E5%8D%87%E7%BA%A7%E6%97%A5%E5%BF%97-(1)%E6%95%B0%E6%8D%AE%E5%BD%95%E5%85%A5%E8%A7%84%E8%8C%83%E5%88%A4%E6%96%AD%E8%A7%A6%E5%8F%91%E9%94%AE/"/>
-    <url>/2023/11/30/%E7%B3%BB%E7%BB%9F%E5%8D%87%E7%BA%A7%E6%97%A5%E5%BF%97-(1)%E6%95%B0%E6%8D%AE%E5%BD%95%E5%85%A5%E8%A7%84%E8%8C%83%E5%88%A4%E6%96%AD%E8%A7%A6%E5%8F%91%E9%94%AE/</url>
-    
-    <content type="html"><![CDATA[<p>历史更新:</p><p><a href="https://moranwuyu.gitee.io/2023/11/30/%E7%B3%BB%E7%BB%9F%E5%8D%87%E7%BA%A7%E6%97%A5%E5%BF%97-(1)%E6%95%B0%E6%8D%AE%E5%BD%95%E5%85%A5%E8%A7%84%E8%8C%83%E5%88%A4%E6%96%AD%E8%A7%A6%E5%8F%91%E9%94%AE/">(1) 增加数据录入是否规范的触发键</a></p><h5 id="触发键-对数据录入是否规范进行判断并弹出提示"><a href="#触发键-对数据录入是否规范进行判断并弹出提示" class="headerlink" title="触发键:对数据录入是否规范进行判断并弹出提示:"></a>触发键:对数据录入是否规范进行判断并弹出提示:</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs mysql">BEGIN<br>-- 更新&quot;责任人&quot;和&quot;首次录入时间&quot;字段<br>    SET NEW.责任人= SUBSTRING_INDEX(USER(), &#x27;@&#x27;, 1);<br>    SET NEW.首次录入时间= NOW();<br><br>-- 错误判断<br>IF NEW.还款金额 &lt;&gt; &#x27;0.00&#x27; AND NEW.还款金额 &lt;&gt; NEW.放款金额 THEN<br>SIGNAL SQLSTATE &#x27;45000&#x27;<br>SET MESSAGE_TEXT = &#x27;录入错误：&quot;还款金额&quot;只能等于&quot;放款金额&quot;或等于&quot;0.00&quot;&#x27;;<br>END IF;<br><br>IF NEW.还款金额 = &#x27;0.00&#x27; AND NEW.还款日期 is not NULL THEN<br>SIGNAL SQLSTATE &#x27;45000&#x27;<br>SET MESSAGE_TEXT = &#x27;录入错误：没有还款!请将&quot;还款日期&quot;的值设为&quot;NULL&quot;&#x27;;<br>END IF;<br><br>IF NEW.还款金额 = NEW.放款金额 AND NEW.还款日期 is NULL THEN<br>SIGNAL SQLSTATE &#x27;45000&#x27;<br>SET MESSAGE_TEXT = &#x27;录入错误：已结清! 请维护&quot;还款日期&quot;&#x27;;<br>END IF;<br><br>IF NEW.质押释放金额 &lt;&gt; &#x27;0.00&#x27; AND NEW.质押释放金额 &lt;&gt; NEW.质押金额 THEN<br>SIGNAL SQLSTATE &#x27;45000&#x27;<br>SET MESSAGE_TEXT = &#x27;录入错误：&quot;质押释放金额&quot;只能等于&quot;质押金额&quot;或等于&quot;0.00&quot;&#x27;;<br>END IF;<br><br>IF NEW.质押释放金额  = &#x27;0.00&#x27; AND NEW.质押释放日期  is not NULL THEN<br>SIGNAL SQLSTATE &#x27;45000&#x27;<br>SET MESSAGE_TEXT = &#x27;录入错误：无保证金释放,请将&quot;质押释放日期&quot;的值设为&quot;NULL&quot;&#x27;;<br>END IF;<br><br>IF NEW.质押释放金额 = NEW.质押金额 AND NEW.质押释放日期 is NULL AND NEW.质押金额&lt;&gt; &#x27;0.00&#x27; THEN<br>SIGNAL SQLSTATE &#x27;45000&#x27;<br>SET MESSAGE_TEXT = &#x27;录入错误：已结清! 请维护&quot;押释放日期&quot;&#x27;;<br>END IF;<br><br>-- 如果还款金额等于放款金额则更新&quot;是否结清&quot;字段<br>  IF NEW.放款金额 = NEW.还款金额 THEN<br>SET NEW.是否结清 = &#x27;是&#x27;;<br>ELSE<br>SET NEW.是否结清 = &#x27;否&#x27;;<br>END IF;<br>END<br></code></pre></td></tr></table></figure>]]></content>
-    
-    
-    <categories>
-      
-      <category>IT</category>
-      
-      <category>MySQL</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>原创</tag>
-      
-      <tag>mysql</tag>
-      
-      <tag>fin_details系统更新日志</tag>
       
     </tags>
     
